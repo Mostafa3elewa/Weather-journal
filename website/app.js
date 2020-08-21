@@ -1,13 +1,11 @@
-/* Global Variables */
-
 // Create a new date instance dynamically with JS
 let d = new Date();
 let newDate = d.getMonth() + "." + d.getDate() + "." + d.getFullYear();
-console.log(`d=${d}`);
-console.log(`newDate=${newDate}`);
-
+// url and api key for weather map to get weather information
 let baseURL = "http://api.openweathermap.org/data/2.5/weather?zip=";
 let apiKey = "&appid=fbc19f26dbca8b238285b1d21369c357";
+
+// function to post data to server side
 
 const postData = async (url = "", data = {}) => {
   const response = await fetch(url, {
@@ -27,10 +25,11 @@ const postData = async (url = "", data = {}) => {
   }
 };
 
+// function to get weather information from externel api (weather map api)
+
 const getWeather = async (baseURL, zip, key) => {
   const res = await fetch(baseURL + zip + key);
   try {
-    console.log(res);
     const data = await res.json();
     return data;
   } catch (err) {
@@ -39,12 +38,12 @@ const getWeather = async (baseURL, zip, key) => {
   }
 };
 
+// Function to update UI with the information that w eget from client and the weather from api
+
 const updateUi = async () => {
   const request = await fetch("/all");
-  console.log(request);
   try {
     const allData = await request.json();
-    console.log(allData);
     document.getElementById("date").innerHTML = newDate;
     document.getElementById("temp").innerHTML =
       allData[allData.length - 1].temp;
@@ -55,9 +54,13 @@ const updateUi = async () => {
   }
 };
 
+//  get data entered by the user so we can use it
+
 const generateWeather = (e) => {
   const zipCode = document.getElementById("zip").value;
   const feelings = document.getElementById("feelings").value;
+
+  // get information from weather map then add it to the server then updaten the UI
 
   getWeather(baseURL, zipCode, apiKey)
     .then((data) => {
@@ -69,5 +72,7 @@ const generateWeather = (e) => {
     })
     .then(updateUi);
 };
+
+// handle the click of user so we can retrieve the data that the user enter
 
 document.getElementById("generate").addEventListener("click", generateWeather);

@@ -6,14 +6,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
-// Start up an instance of app
-
 /* Middleware*/
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// Cors for cross origin allowance
 
 // Initialize the main project folder
 app.use(express.static("website"));
@@ -22,25 +18,23 @@ app.use(express.static("website"));
 
 app.get("/", (req, res) => {
   res.send(projectData);
-  //console.log(projectData);
 });
 
+// add data from the client side and the weather map to server side
+
 app.post("/addWeather", (req, res) => {
-  //console.log(req.body);
   newDataEntry = {
     temp: req.body.temp,
     feelings: req.body.feelings,
   };
-  //console.log(newDataEntry);
   projectData.push(newDataEntry);
   res.send(projectData);
-  // console.log(projectData);
 });
 
+//send data to client side so we udate the ui
+
 app.get("/all", (req, res) => {
-  console.log(projectData);
   res.send(projectData);
-  return projectData;
 });
 
 // Setup Server
